@@ -11,7 +11,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.Minestom:Minestom:a9e319f961'
+    implementation 'com.github.Minestom:Minestom:e0427a36f3'
 }
 
 test {
@@ -20,7 +20,7 @@ test {
 
 jar {
     manifest {
-        attributes "Main-Class": "dev.bedcrab.BlockyTDServer",
+        attributes "Main-Class": "dev.bedcrab.Main",
                 "Multi-Release": true
     }
 }

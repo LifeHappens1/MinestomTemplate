@@ -3,6 +3,11 @@ package dev.bedcrab.server;
 import dev.bedcrab.commands.ServerCommands;
 import dev.bedcrab.events.ServerEvents;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.extras.MojangAuth;
+import net.minestom.server.extras.optifine.OptifineSupport;
+import net.minestom.server.instance.AnvilLoader;
+import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.InstanceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,12 +17,14 @@ public class MinestomServer {
     private static MinestomServer instance = null;
     private static final Logger logger = LoggerFactory.getLogger(MinestomServer.class);
     public static final Properties configuration = new Properties();
+    public static InstanceContainer instanceContainer;
 
     /**
      * Pre-startup tasks: executed before the server starts. Throw {@link RuntimeException}s if necessary.
      */
     private void preStartup() throws RuntimeException {
-        // add database code here or something
+        OptifineSupport.enable();
+        MojangAuth.init();
     }
 
     /**
@@ -47,6 +54,11 @@ public class MinestomServer {
             System.exit(1);
             return;
         }
+
+        InstanceManager instanceManager = MinecraftServer.getInstanceManager();
+        instanceContainer = instanceManager.createInstanceContainer();
+
+        instanceContainer.setChunkLoader(new AnvilLoader("worlds/world/region"));
 
         String ip = (String) configuration.get("server-ip");
         int port = Integer.parseInt((String) configuration.get("server-port"));
